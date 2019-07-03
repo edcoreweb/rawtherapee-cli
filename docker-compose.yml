@@ -1,0 +1,12 @@
+version: "3"
+# define all services
+services:
+
+  #  The Application
+  app:
+    # we want to use the image which is build from our Dockerfile
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+    - ./code:/root/programs/code-rawtherapee
