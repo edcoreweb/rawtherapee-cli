@@ -10,3 +10,4 @@ services:
       dockerfile: Dockerfile
     volumes:
     - ./cli.cc:/root/programs/code-rawtherapee/rtgui/main-cli.cc
+    - ./input:/root/input
