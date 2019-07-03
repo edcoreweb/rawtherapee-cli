@@ -121,35 +121,50 @@ public:
         // params.wb.method = rtengine::procparams::WBEntry::Type::CUSTOM; // temp;
         params.wb.method = "Custom";
         params.wb.temperature = temp;
-        params.toneCurve.expcomp = .6f;
+        // params.toneCurve.expcomp = .6f;
         params.wb.green = green;
 
-        // create a processing job with the loaded image and the current processing parameters
-        rtengine::ProcessingJob* job = rtengine::ProcessingJob::create (image, params);
+        rtengine::IImagefloat* res = nullptr;
+        rtengine::ProcessingJob* job = nullptr;
+        float LAB_l;
+        int minL = 7500;
+        int maxL = 7600;
 
-        // process image. The error is given back in errorcode.
-        int errorCode;
-        rtengine::IImagefloat* res = rtengine::processImage (job, errorCode, nullptr);
+        
+        do {
+            // create a processing job with the loaded image and the current processing parameters
+            job = rtengine::ProcessingJob::create (image, params);
+
+            // process image. The error is given back in errorcode.
+            int errorCode;
+            res = rtengine::processImage (job, errorCode, nullptr);
 
 
-        float r, g, bl;
-        res->getPipetteData(r, g, bl, 2370, 1740, 8, 0);
-        std::cout << r / 255.f << ", " << g / 255.f << ", " << bl / 255.f << std::endl;
+            float r, g, bl;
+            res->getPipetteData(r, g, bl, 2370, 1740, 8, 0);
+            std::cout << r / 255.f << ", " << g / 255.f << ", " << bl / 255.f << std::endl;
 
-        // rtengine::LabImage* lab = new rtengine::LabImage(res->getWidth(), res->getHeight());
-        // rtengine::Imagefloat* src = new rtengine::Imagefloat(res->getWidth(), res->getHeight());
-        // res->copyData(src);
+            // rtengine::LabImage* lab = new rtengine::LabImage(res->getWidth(), res->getHeight());
+            // rtengine::Imagefloat* src = new rtengine::Imagefloat(res->getWidth(), res->getHeight());
+            // res->copyData(src);
 
-        // rtengine::ImProcFunctions* ipf = new rtengine::ImProcFunctions(&params);
-        // ipf->rgb2lab(*src, *lab, params.icm.workingProfile);
+            // rtengine::ImProcFunctions* ipf = new rtengine::ImProcFunctions(&params);
+            // ipf->rgb2lab(*src, *lab, params.icm.workingProfile);
 
-        // float L, a, b;
-        // lab->getPipetteData(L, a, b, 2370, 1740, 8);
-        // std::cout << L << ", " << a << ", " << b << std::endl;
+            // float L, a, b;
+            // lab->getPipetteData(L, a, b, 2370, 1740, 8);
+            // std::cout << L << ", " << a << ", " << b << std::endl;
 
-        float LAB_l, LAB_a, LAB_b;
-        rtengine::Color::rgb2lab01(params.icm.outputProfile, params.icm.workingProfile, r / 255.f, g / 255.f, bl / 255.f, LAB_l, LAB_a, LAB_b, options.rtSettings.HistogramWorking);
-        std::cout << LAB_l << ", " << LAB_a << ", " << LAB_b << std::endl;
+            float LAB_a, LAB_b;
+            rtengine::Color::rgb2lab01(params.icm.outputProfile, params.icm.workingProfile, r / 255.f, g / 255.f, bl / 255.f, LAB_l, LAB_a, LAB_b, options.rtSettings.HistogramWorking);
+            std::cout << LAB_l << ", " << LAB_a << ", " << LAB_b << std::endl;
+            
+            float increment = LAB_l < minL ? .1f : -(.1f);
+            params.toneCurve.expcomp += increment;
+            // delete job;
+            // delete res;
+
+        } while (LAB_l < minL || LAB_l > maxL);
 
         // save image to disk
         res->saveToFile (path);
