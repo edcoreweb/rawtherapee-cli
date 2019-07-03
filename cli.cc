@@ -26,6 +26,7 @@
 #include <locale.h>
 #include "../rtengine/procparams.h"
 #include "../rtengine/profilestore.h"
+#include "../rtengine/improcfun.h"
 #include "options.h"
 #include "soundman.h"
 #include "rtimage.h"
@@ -58,9 +59,11 @@ class Worker : public rtengine::ProgressListener
 private:
     rtengine::InitialImage* image;
     rtengine::StagedImageProcessor* ipc;
+    char* path;
 public:
-    Worker(rtengine::InitialImage* ii) {
+    Worker(rtengine::InitialImage* ii, char* p) {
         image = ii;
+        path = p;
         ipc = rtengine::StagedImageProcessor::create(image);
         ipc->setProgressListener(this);
         ipc->setPreviewScale(1);
@@ -73,9 +76,77 @@ public:
 
     void work()
     {
+        rtengine::procparams::ProcParams* params  = new rtengine::procparams::ProcParams();
         rtengine::procparams::ProcParams* ipcParams = ipc->beginUpdateParams();
         // TODO: modify params ?
+
+        rtengine::procparams::PartialProfile* profile = getPartialProfile();
+        if (profile != nullptr) {
+            std::cout << "Error: nullptd." << std::endl;
+            profile->applyTo (params);
+            profile->deleteInstance();
+            delete profile;
+        }
+
+        *ipcParams = *params;
+
         ipc->endUpdateParams(rtengine::ProcEventCode::EvPhotoLoaded);
+    }
+
+    rtengine::procparams::PartialProfile* getPartialProfile()
+    {
+        rtengine::procparams::PartialProfile* rawParams;
+
+        rawParams = new rtengine::procparams::PartialProfile (true, true);
+        Glib::ustring profPath = options.findProfilePath (options.defProfRaw);
+
+        if (options.is_defProfRawMissing() || profPath.empty() || (profPath != DEFPROFILE_DYNAMIC && rawParams->load (profPath == DEFPROFILE_INTERNAL ? DEFPROFILE_INTERNAL : Glib::build_filename (profPath, Glib::path_get_basename (options.defProfRaw) + paramFileExtension)))) {
+            std::cerr << "Error: default raw processing profile not found." << std::endl;
+            rawParams->deleteInstance();
+            delete rawParams;
+            // deleteProcParams (processingParams);
+            return nullptr;
+        }
+
+        return rawParams;
+    }
+
+    void saveImage(double temp, double green)
+    {
+        // TODO: cleanup
+        rtengine::procparams::ProcParams params;
+
+        ipc->getParams(&params);
+
+        // params.wb.method = rtengine::procparams::WBEntry::Type::CUSTOM; // temp;
+        params.wb.method = "Custom";
+        params.wb.temperature = temp;
+        // params.toneCurve.expcomp = 3;
+        params.wb.green = green;
+
+        // create a processing job with the loaded image and the current processing parameters
+        rtengine::ProcessingJob* job = rtengine::ProcessingJob::create (image, params);
+
+        // process image. The error is given back in errorcode.
+        int errorCode;
+        rtengine::IImagefloat* res = rtengine::processImage (job, errorCode, nullptr);
+
+
+        float r, g, b;
+        res->getPipetteData(r, g, b, 2370, 1740, 8, 0);
+        std::cout << r << ", " << g << ", " << b << std::endl;
+
+        // rtengine::LabImage* lab = new rtengine::LabImage(res->getWidth(), res->getHeight());
+        // rtengine::ImProcFunctions* ipf = new rtengine::ImProcFunctions(&params);
+
+        // ipf->rgb2lab(res, lab, params.icm.workingProfile);
+
+        // float L, a, b;
+        // lab->getPipetteData(L, a, b, 2370, 1740, 8);
+        // std::cout << L << ", " << a << ", " << b << std::endl;
+
+        // save image to disk
+        res->saveToFile (path);
     }
     
     void setProgressStr(const Glib::ustring& str)
@@ -98,6 +169,8 @@ public:
             ipc->getSpotWB(2370, 1740, 8, temp, green);
 
             std::cout << "temp:" << temp << "|green:" << green<< std::endl;
+            
+            saveImage(temp, green);
         }
     }
 
@@ -132,7 +205,7 @@ int main (int argc, char* argv[])
         exit(2);
     }
 
-    Worker* worker = new Worker(ii);
+    Worker* worker = new Worker(ii, argv[2]);
     worker->work();
 
     delete worker;
