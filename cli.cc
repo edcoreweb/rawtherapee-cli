@@ -121,7 +121,7 @@ public:
         // params.wb.method = rtengine::procparams::WBEntry::Type::CUSTOM; // temp;
         params.wb.method = "Custom";
         params.wb.temperature = temp;
-        // params.toneCurve.expcomp = 3;
+        params.toneCurve.expcomp = .6f;
         params.wb.green = green;
 
         // create a processing job with the loaded image and the current processing parameters
@@ -132,18 +132,24 @@ public:
         rtengine::IImagefloat* res = rtengine::processImage (job, errorCode, nullptr);
 
 
-        float r, g, b;
-        res->getPipetteData(r, g, b, 2370, 1740, 8, 0);
-        std::cout << r << ", " << g << ", " << b << std::endl;
+        float r, g, bl;
+        res->getPipetteData(r, g, bl, 2370, 1740, 8, 0);
+        std::cout << r / 255.f << ", " << g / 255.f << ", " << bl / 255.f << std::endl;
 
         // rtengine::LabImage* lab = new rtengine::LabImage(res->getWidth(), res->getHeight());
-        // rtengine::ImProcFunctions* ipf = new rtengine::ImProcFunctions(&params);
+        // rtengine::Imagefloat* src = new rtengine::Imagefloat(res->getWidth(), res->getHeight());
+        // res->copyData(src);
 
-        // ipf->rgb2lab(res, lab, params.icm.workingProfile);
+        // rtengine::ImProcFunctions* ipf = new rtengine::ImProcFunctions(&params);
+        // ipf->rgb2lab(*src, *lab, params.icm.workingProfile);
 
         // float L, a, b;
         // lab->getPipetteData(L, a, b, 2370, 1740, 8);
         // std::cout << L << ", " << a << ", " << b << std::endl;
+
+        float LAB_l, LAB_a, LAB_b;
+        rtengine::Color::rgb2lab01(params.icm.outputProfile, params.icm.workingProfile, r / 255.f, g / 255.f, bl / 255.f, LAB_l, LAB_a, LAB_b, options.rtSettings.HistogramWorking);
+        std::cout << LAB_l << ", " << LAB_a << ", " << LAB_b << std::endl;
 
         // save image to disk
         res->saveToFile (path);
