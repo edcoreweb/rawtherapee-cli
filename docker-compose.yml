@@ -9,4 +9,4 @@ services:
       context: ./
       dockerfile: Dockerfile
     volumes:
-    - ./code:/root/programs/code-rawtherapee
+    - ./cli.cc:/root/programs/code-rawtherapee/rtgui/main-cli.cc

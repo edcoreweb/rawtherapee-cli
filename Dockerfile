@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y \
       wget \
       curl \
       git \
+      vim \
       libcanberra-gtk3-dev \
       libexiv2-dev \
       libexpat-dev \
@@ -26,9 +27,11 @@ RUN apt-get update && apt-get install -y \
       zlib1g-dev \
     && rm -r /var/lib/apt/lists/*
 
+WORKDIR /root
+
 # Install rawtherapee
 RUN wget https://raw.githubusercontent.com/Beep6581/RawTherapee/dev/tools/build-rawtherapee -O build-rawtherapee
 RUN chmod +x build-rawtherapee
-#RUN ./build-rawtherapee
+RUN ./build-rawtherapee
 
 CMD ["/bin/bash"]
