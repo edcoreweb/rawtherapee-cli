@@ -66,7 +66,7 @@ public:
         path = p;
         ipc = rtengine::StagedImageProcessor::create(image);
         ipc->setProgressListener(this);
-        ipc->setPreviewScale(1);
+        ipc->setPreviewScale(10);
     }
 
     ~Worker()
@@ -76,13 +76,13 @@ public:
 
     void work()
     {
+        std::cout << "Loaded image.." << std::endl;
         rtengine::procparams::ProcParams* params  = new rtengine::procparams::ProcParams();
         rtengine::procparams::ProcParams* ipcParams = ipc->beginUpdateParams();
         // TODO: modify params ?
 
         rtengine::procparams::PartialProfile* profile = getPartialProfile();
         if (profile != nullptr) {
-            std::cout << "Error: nullptd." << std::endl;
             profile->applyTo (params);
             profile->deleteInstance();
             delete profile;
@@ -111,11 +111,29 @@ public:
         return rawParams;
     }
 
+    rtengine::IImagefloat* adjustExposure(const rtengine::procparams::ProcParams &params, float &LAB_l)
+    {
+        // create a processing job with the loaded image and the current processing parameters
+        rtengine::ProcessingJob* job = rtengine::ProcessingJob::create (image, params);
+
+        // process image. The error is given back in errorcode.
+        int errorCode;
+        rtengine::IImagefloat* res = rtengine::processImage (job, errorCode, nullptr);
+
+        float r, g, bl;
+        res->getPipetteData(r, g, bl, 2370, 1740, 8, 0);
+
+        float LAB_a, LAB_b;
+        rtengine::Color::rgb2lab01(params.icm.outputProfile, params.icm.workingProfile, r / 65535.f, g / 65535.f, bl / 65535.f, LAB_l, LAB_a, LAB_b, options.rtSettings.HistogramWorking);
+        std::cout << LAB_l << ", " << LAB_a << ", " << LAB_b << std::endl;
+
+        return res;
+    }
+
     void saveImage(double temp, double green)
     {
         // TODO: cleanup
         rtengine::procparams::ProcParams params;
-
         ipc->getParams(&params);
 
         // params.wb.method = rtengine::procparams::WBEntry::Type::CUSTOM; // temp;
@@ -124,50 +142,35 @@ public:
         // params.toneCurve.expcomp = .6f;
         params.wb.green = green;
 
-        rtengine::IImagefloat* res = nullptr;
-        rtengine::ProcessingJob* job = nullptr;
-        float LAB_l;
-        int minL = 7500;
-        int maxL = 7600;
+        float LAB_l, LAB_l_prev;
+        float minL = 79;
+        float maxL = 79.5;
 
-        
-        do {
-            // create a processing job with the loaded image and the current processing parameters
-            job = rtengine::ProcessingJob::create (image, params);
+        // get the initial value
+        rtengine::IImagefloat* res = adjustExposure(params, LAB_l_prev);
+        float increment = LAB_l_prev < minL ? .05f : -(.05f);
 
-            // process image. The error is given back in errorcode.
-            int errorCode;
-            res = rtengine::processImage (job, errorCode, nullptr);
+        // compute how much one point moves us
+        params.toneCurve.expcomp += increment;
+        res = adjustExposure(params, LAB_l);
 
+        // try to match it
+        while (LAB_l < minL || LAB_l > maxL) {
+            // TODO: do not get stuck in an infinite loop
+            float diff = abs(LAB_l - LAB_l_prev);
+            float toGo = abs(minL - LAB_l);
+            std::cout << "diff:" << diff << "|toGo:" << toGo << std::endl;
 
-            float r, g, bl;
-            res->getPipetteData(r, g, bl, 2370, 1740, 8, 0);
-            std::cout << r / 255.f << ", " << g / 255.f << ", " << bl / 255.f << std::endl;
-
-            // rtengine::LabImage* lab = new rtengine::LabImage(res->getWidth(), res->getHeight());
-            // rtengine::Imagefloat* src = new rtengine::Imagefloat(res->getWidth(), res->getHeight());
-            // res->copyData(src);
-
-            // rtengine::ImProcFunctions* ipf = new rtengine::ImProcFunctions(&params);
-            // ipf->rgb2lab(*src, *lab, params.icm.workingProfile);
-
-            // float L, a, b;
-            // lab->getPipetteData(L, a, b, 2370, 1740, 8);
-            // std::cout << L << ", " << a << ", " << b << std::endl;
-
-            float LAB_a, LAB_b;
-            rtengine::Color::rgb2lab01(params.icm.outputProfile, params.icm.workingProfile, r / 255.f, g / 255.f, bl / 255.f, LAB_l, LAB_a, LAB_b, options.rtSettings.HistogramWorking);
-            std::cout << LAB_l << ", " << LAB_a << ", " << LAB_b << std::endl;
-            
-            float increment = LAB_l < minL ? .1f : -(.1f);
-            params.toneCurve.expcomp += increment;
-            // delete job;
-            // delete res;
-
-        } while (LAB_l < minL || LAB_l > maxL);
+            increment = LAB_l_prev < minL ? .05f : -(.05f);
+            params.toneCurve.expcomp += std::max(increment * toGo / diff, increment);
+            LAB_l_prev = LAB_l;
+            res = adjustExposure(params, LAB_l);
+        }
 
         // save image to disk
         res->saveToFile (path);
+        // save profile as well
+        params.save(strcat(path, ".pp3"));
     }
     
     void setProgressStr(const Glib::ustring& str)
