@@ -121,7 +121,7 @@ public:
         rtengine::IImagefloat* res = rtengine::processImage (job, errorCode, nullptr);
 
         float r, g, bl;
-        res->getPipetteData(r, g, bl, 2370, 1740, 8, 0);
+        res->getPipetteData(r, g, bl, 50, 50, 8, 0);
 
         float LAB_a, LAB_b;
         rtengine::Color::rgb2lab01(params.icm.outputProfile, params.icm.workingProfile, r / 65535.f, g / 65535.f, bl / 65535.f, LAB_l, LAB_a, LAB_b, options.rtSettings.HistogramWorking);
@@ -141,6 +141,13 @@ public:
         params.wb.temperature = temp;
         // params.toneCurve.expcomp = .6f;
         params.wb.green = green;
+
+        rtengine::procparams::CropParams crop = params.crop;
+
+        params.crop.enabled = true;
+        params.crop.x = 2370 - 50;
+        params.crop.y = 1740 - 50;
+        params.crop.w = params.crop.h = 100;
 
         float LAB_l, LAB_l_prev;
         float minL = 79;
@@ -167,6 +174,9 @@ public:
             res = adjustExposure(params, LAB_l);
         }
 
+        params.crop.enabled = false;
+        res = adjustExposure(params, LAB_l);
+        
         // save image to disk
         res->saveToFile (path);
         // save profile as well
