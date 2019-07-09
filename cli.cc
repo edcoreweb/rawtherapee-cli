@@ -60,13 +60,18 @@ private:
     rtengine::InitialImage* image;
     rtengine::StagedImageProcessor* ipc;
     char* path;
+    int x, y;
+    float mL;
 public:
-    Worker(rtengine::InitialImage* ii, char* p) {
+    Worker(rtengine::InitialImage* ii, char* p, int xc, int yc, float minL) {
         image = ii;
         path = p;
         ipc = rtengine::StagedImageProcessor::create(image);
         ipc->setProgressListener(this);
         ipc->setPreviewScale(10);
+        x = xc;
+        y = yc;
+        mL = minL;
     }
 
     ~Worker()
@@ -145,13 +150,13 @@ public:
         rtengine::procparams::CropParams crop = params.crop;
 
         params.crop.enabled = true;
-        params.crop.x = 2370 - 50;
-        params.crop.y = 1740 - 50;
+        params.crop.x = x - 50;
+        params.crop.y = y - 50;
         params.crop.w = params.crop.h = 100;
 
         float LAB_l, LAB_l_prev;
-        float minL = 79;
-        float maxL = 79.5;
+        float minL = mL;
+        float maxL = minL + .5f;
 
         // get the initial value
         rtengine::IImagefloat* res = adjustExposure(params, LAB_l_prev);
@@ -200,7 +205,7 @@ public:
         if (inProcessing == false)
         {
             double temp, green;
-            ipc->getSpotWB(2370, 1740, 8, temp, green);
+            ipc->getSpotWB(x, y, 8, temp, green);
 
             std::cout << "temp:" << temp << "|green:" << green<< std::endl;
             
@@ -223,8 +228,8 @@ int main (int argc, char* argv[])
         exit(code);
     }
 
-    if (argc < 3) {
-        std::cout << "Usage: rtcmd <infile> <outfile>" << std::endl;
+    if (argc < 6) {
+        std::cout << "Usage: rtcmd <infile> <outfile> <x> <y> <minL>" << std::endl;
         exit(1);
     }
 
@@ -239,7 +244,7 @@ int main (int argc, char* argv[])
         exit(2);
     }
 
-    Worker* worker = new Worker(ii, argv[2]);
+    Worker* worker = new Worker(ii, argv[2], atoi(argv[3]), atoi(argv[4]), atof(argv[5]));
     worker->work();
 
     delete worker;
