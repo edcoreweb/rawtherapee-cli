@@ -9,5 +9,6 @@ services:
       context: ./
       dockerfile: Dockerfile
     volumes:
-    - ./cli.cc:/root/programs/code-rawtherapee/rtgui/main-cli.cc
+    - ./cli.cc:/root/programs/code-rawtherapee/rtgui/main-cli-custom.cc
+    - ./CMakeLists.txt:/root/programs/code-rawtherapee/rtgui/CMakeLists.txt
     - ./input:/root/input
