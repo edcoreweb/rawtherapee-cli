@@ -26,6 +26,7 @@
 #include <locale.h>
 #include "../rtengine/procparams.h"
 #include "../rtengine/profilestore.h"
+#include "../rtengine/improcfun.h"
 #include "options.h"
 #include "soundman.h"
 #include "rtimage.h"
@@ -58,12 +59,19 @@ class Worker : public rtengine::ProgressListener
 private:
     rtengine::InitialImage* image;
     rtengine::StagedImageProcessor* ipc;
+    char* path;
+    int x, y;
+    float mL;
 public:
-    Worker(rtengine::InitialImage* ii) {
+    Worker(rtengine::InitialImage* ii, char* p, int xc, int yc, float minL) {
         image = ii;
+        path = p;
         ipc = rtengine::StagedImageProcessor::create(image);
         ipc->setProgressListener(this);
-        ipc->setPreviewScale(1);
+        ipc->setPreviewScale(10);
+        x = xc;
+        y = yc;
+        mL = minL;
     }
 
     ~Worker()
@@ -73,9 +81,111 @@ public:
 
     void work()
     {
+        std::cout << "Loaded image.." << std::endl;
+        rtengine::procparams::ProcParams* params  = new rtengine::procparams::ProcParams();
         rtengine::procparams::ProcParams* ipcParams = ipc->beginUpdateParams();
         // TODO: modify params ?
+
+        rtengine::procparams::PartialProfile* profile = getPartialProfile();
+        if (profile != nullptr) {
+            profile->applyTo (params);
+            profile->deleteInstance();
+            delete profile;
+        }
+
+        *ipcParams = *params;
+
         ipc->endUpdateParams(rtengine::ProcEventCode::EvPhotoLoaded);
+    }
+
+    rtengine::procparams::PartialProfile* getPartialProfile()
+    {
+        rtengine::procparams::PartialProfile* rawParams;
+
+        rawParams = new rtengine::procparams::PartialProfile (true, true);
+        Glib::ustring profPath = options.findProfilePath (options.defProfRaw);
+
+        if (options.is_defProfRawMissing() || profPath.empty() || (profPath != DEFPROFILE_DYNAMIC && rawParams->load (profPath == DEFPROFILE_INTERNAL ? DEFPROFILE_INTERNAL : Glib::build_filename (profPath, Glib::path_get_basename (options.defProfRaw) + paramFileExtension)))) {
+            std::cerr << "Error: default raw processing profile not found." << std::endl;
+            rawParams->deleteInstance();
+            delete rawParams;
+            // deleteProcParams (processingParams);
+            return nullptr;
+        }
+
+        return rawParams;
+    }
+
+    rtengine::IImagefloat* adjustExposure(const rtengine::procparams::ProcParams &params, float &LAB_l)
+    {
+        // create a processing job with the loaded image and the current processing parameters
+        rtengine::ProcessingJob* job = rtengine::ProcessingJob::create (image, params);
+
+        // process image. The error is given back in errorcode.
+        int errorCode;
+        rtengine::IImagefloat* res = rtengine::processImage (job, errorCode, nullptr);
+
+        float r, g, bl;
+        res->getPipetteData(r, g, bl, 50, 50, 8, 0);
+
+        float LAB_a, LAB_b;
+        rtengine::Color::rgb2lab01(params.icm.outputProfile, params.icm.workingProfile, r / 65535.f, g / 65535.f, bl / 65535.f, LAB_l, LAB_a, LAB_b, options.rtSettings.HistogramWorking);
+        std::cout << LAB_l << ", " << LAB_a << ", " << LAB_b << std::endl;
+
+        return res;
+    }
+
+    void saveImage(double temp, double green)
+    {
+        // TODO: cleanup
+        rtengine::procparams::ProcParams params;
+        ipc->getParams(&params);
+
+        // params.wb.method = rtengine::procparams::WBEntry::Type::CUSTOM; // temp;
+        params.wb.method = "Custom";
+        params.wb.temperature = temp;
+        // params.toneCurve.expcomp = .6f;
+        params.wb.green = green;
+
+        rtengine::procparams::CropParams crop = params.crop;
+
+        params.crop.enabled = true;
+        params.crop.x = x - 50;
+        params.crop.y = y - 50;
+        params.crop.w = params.crop.h = 100;
+
+        float LAB_l, LAB_l_prev;
+        float minL = mL;
+        float maxL = minL + .5f;
+
+        // get the initial value
+        rtengine::IImagefloat* res = adjustExposure(params, LAB_l_prev);
+        float increment = LAB_l_prev < minL ? .05f : -(.05f);
+
+        // compute how much one point moves us
+        params.toneCurve.expcomp += increment;
+        res = adjustExposure(params, LAB_l);
+
+        // try to match it
+        while (LAB_l < minL || LAB_l > maxL) {
+            // TODO: do not get stuck in an infinite loop
+            float diff = abs(LAB_l - LAB_l_prev);
+            float toGo = abs(minL - LAB_l);
+            std::cout << "diff:" << diff << "|toGo:" << toGo << std::endl;
+
+            increment = LAB_l_prev < minL ? .05f : -(.05f);
+            params.toneCurve.expcomp += std::max(increment * toGo / diff, increment);
+            LAB_l_prev = LAB_l;
+            res = adjustExposure(params, LAB_l);
+        }
+
+        params.crop.enabled = false;
+        res = adjustExposure(params, LAB_l);
+        
+        // save image to disk
+        res->saveToFile (path);
+        // save profile as well
+        params.save(strcat(path, ".pp3"));
     }
     
     void setProgressStr(const Glib::ustring& str)
@@ -95,9 +205,11 @@ public:
         if (inProcessing == false)
         {
             double temp, green;
-            ipc->getSpotWB(2370, 1740, 8, temp, green);
+            ipc->getSpotWB(x, y, 8, temp, green);
 
             std::cout << "temp:" << temp << "|green:" << green<< std::endl;
+            
+            saveImage(temp, green);
         }
     }
 
@@ -116,8 +228,8 @@ int main (int argc, char* argv[])
         exit(code);
     }
 
-    if (argc < 3) {
-        std::cout << "Usage: rtcmd <infile> <outfile>" << std::endl;
+    if (argc < 6) {
+        std::cout << "Usage: rtcmd <infile> <outfile> <x> <y> <minL>" << std::endl;
         exit(1);
     }
 
@@ -132,7 +244,7 @@ int main (int argc, char* argv[])
         exit(2);
     }
 
-    Worker* worker = new Worker(ii);
+    Worker* worker = new Worker(ii, argv[2], atoi(argv[3]), atoi(argv[4]), atof(argv[5]));
     worker->work();
 
     delete worker;
