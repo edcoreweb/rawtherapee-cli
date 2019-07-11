@@ -34,4 +34,10 @@ RUN wget https://raw.githubusercontent.com/Beep6581/RawTherapee/dev/tools/build-
 RUN chmod +x build-rawtherapee
 RUN ./build-rawtherapee
 
+# Build our custom cli
+RUN rm -rf ./programs/rawtherapee
+COPY CMakeLists.txt ./programs/code-rawtherapee/rtgui/CMakeLists.txt
+COPY cli.cc ./programs/code-rawtherapee/rtgui/main-cli-custom.cc
+RUN ./build-rawtherapee
+
 CMD ["/bin/bash"]
