@@ -27,6 +27,8 @@
 #include "../rtengine/procparams.h"
 #include "../rtengine/profilestore.h"
 #include "../rtengine/improcfun.h"
+#include "../rtengine/improccoordinator.h"
+#include "../rtengine/refreshmap.h"
 #include "options.h"
 #include "soundman.h"
 #include "rtimage.h"
@@ -54,21 +56,45 @@ Glib::ustring creditsPath;
 Glib::ustring licensePath;
 Glib::ustring argv1;
 
-class Worker : public rtengine::ProgressListener
+class IPC : public rtengine::ImProcCoordinator
+{
+public:
+    void process(int changeFlags)
+    {
+        changeSinceLast |= changeFlags;
+
+        paramsUpdateMutex.unlock();
+        rtengine::ImProcCoordinator::process();
+    }
+};
+
+class Worker : public rtengine::ProgressListener, public rtengine::DetailedCropListener
 {
 private:
     rtengine::InitialImage* image;
-    rtengine::StagedImageProcessor* ipc;
+    IPC* ipc;
     char* path;
     int x, y;
     float mL;
+    bool adjustedWB = false;
+    bool adjustingExposure = true;
+    float LAB_l = 0, LAB_l_prev = 0;
+
+    rtengine::IImage8 *cropImage;
+    rtengine::DetailedCrop* crop;
 public:
-    Worker(rtengine::InitialImage* ii, char* p, int xc, int yc, float minL) {
+    Worker(rtengine::InitialImage* ii, char* p, int xc, int yc, float minL)
+    {
         image = ii;
         path = p;
-        ipc = rtengine::StagedImageProcessor::create(image);
+        ipc = new IPC();
+        ipc->assign(image->getImageSource());
+
         ipc->setProgressListener(this);
-        ipc->setPreviewScale(10);
+        // ipc->setPreviewScale(10);
+        crop = ipc->createCrop(nullptr, false);
+        crop->setListener(this);
+
         x = xc;
         y = yc;
         mL = minL;
@@ -76,7 +102,66 @@ public:
 
     ~Worker()
     {
-        rtengine::StagedImageProcessor::destroy(ipc);
+        if (cropImage) {
+            cropImage->free();
+        }
+
+        delete crop;
+
+        // TODO: memory leak ?
+        // delete ipc;
+        // rtengine::StagedImageProcessor::destroy(static_cast<rtengine::StagedImageProcessor*>(ipc));
+    }
+
+    void setDetailedCrop(
+        rtengine::IImage8* img, rtengine::IImage8* imgtrue,
+        const rtengine::procparams::ColorManagementParams& cmp, const rtengine::procparams::CropParams& cp,
+        int cx, int cy, int cw, int ch, int skip
+    ) {
+        if (cropImage) {
+            cropImage->free();
+        }
+
+        cropImage = new rtengine::Image8(100, 100);
+        imgtrue->copyData(cropImage);
+    }
+
+    void getPipetteData(float &valueR, float &valueG, float &valueB, int posX, int posY, const int squareSize, int tran)
+    {
+        int x;
+        int y;
+        int width = cropImage->getWidth();
+        int height = cropImage->getHeight();
+        float accumulatorR = 0.f;  // using float to avoid range overflow; -> please creates specialization if necessary
+        float accumulatorG = 0.f;  //    "
+        float accumulatorB = 0.f;  //    "
+        unsigned long int n = 0;
+        int halfSquare = squareSize / 2;
+        cropImage->transformPixel (posX, posY, tran, x, y);
+
+        for (int iy = y - halfSquare; iy < y - halfSquare + squareSize; ++iy) {
+            for (int ix = x - halfSquare; ix < x - halfSquare + squareSize; ++ix) {
+                if (ix >= 0 && iy >= 0 && ix < width && iy < height) {
+                    accumulatorR += float(cropImage->r(iy, ix));
+                    accumulatorG += float(cropImage->g(iy, ix));
+                    accumulatorB += float(cropImage->b(iy, ix));
+                    ++n;
+                }
+            }
+        }
+
+        valueR = n ? float(accumulatorR / float(n)) : float(0);
+        valueG = n ? float(accumulatorG / float(n)) : float(0);
+        valueB = n ? float(accumulatorB / float(n)) : float(0);
+    }
+
+    void getWindow(int& cx, int& cy, int& cw, int& ch, int& skip)
+    {
+        cx = x - 50;
+        cy = y - 50;
+        cw = 100;
+        ch = 100;
+        skip = 1;
     }
 
     void work()
@@ -84,7 +169,6 @@ public:
         std::cout << "Loaded image.." << std::endl;
         rtengine::procparams::ProcParams* params  = new rtengine::procparams::ProcParams();
         rtengine::procparams::ProcParams* ipcParams = ipc->beginUpdateParams();
-        // TODO: modify params ?
 
         rtengine::procparams::PartialProfile* profile = getPartialProfile();
         if (profile != nullptr) {
@@ -94,8 +178,9 @@ public:
         }
 
         *ipcParams = *params;
+        delete params;
 
-        ipc->endUpdateParams(rtengine::ProcEventCode::EvPhotoLoaded);
+        ipc->process(ALL);
     }
 
     rtengine::procparams::PartialProfile* getPartialProfile()
@@ -116,105 +201,101 @@ public:
         return rawParams;
     }
 
-    rtengine::IImagefloat* adjustExposure(const rtengine::procparams::ProcParams &params, float &LAB_l)
+    void adjustExposure(const rtengine::procparams::ProcParams* params, float &LAB_l)
     {
-        // create a processing job with the loaded image and the current processing parameters
-        rtengine::ProcessingJob* job = rtengine::ProcessingJob::create (image, params);
-
-        // process image. The error is given back in errorcode.
-        int errorCode;
-        rtengine::IImagefloat* res = rtengine::processImage (job, errorCode, nullptr);
-
         float r, g, bl;
-        res->getPipetteData(r, g, bl, 50, 50, 8, 0);
+        getPipetteData(r, g, bl, 50, 50, 8, 0);
 
         float LAB_a, LAB_b;
-        rtengine::Color::rgb2lab01(params.icm.outputProfile, params.icm.workingProfile, r / 65535.f, g / 65535.f, bl / 65535.f, LAB_l, LAB_a, LAB_b, options.rtSettings.HistogramWorking);
+        rtengine::Color::rgb2lab01(params->icm.outputProfile, params->icm.workingProfile, r / 255, g / 255, bl / 255, LAB_l, LAB_a, LAB_b, options.rtSettings.HistogramWorking);
         std::cout << LAB_l << ", " << LAB_a << ", " << LAB_b << std::endl;
-
-        return res;
     }
 
-    void saveImage(double temp, double green)
+    void saveImage()
     {
-        // TODO: cleanup
-        rtengine::procparams::ProcParams params;
-        ipc->getParams(&params);
+        rtengine::procparams::ProcParams* params = ipc->beginUpdateParams();
 
-        // params.wb.method = rtengine::procparams::WBEntry::Type::CUSTOM; // temp;
-        params.wb.method = "Custom";
-        params.wb.temperature = temp;
-        // params.toneCurve.expcomp = .6f;
-        params.wb.green = green;
+        if (adjustedWB == false)
+        {
+            adjustedWB = true;
+            double temp, green;
+            ipc->getSpotWB(x, y, 8, temp, green);
+            std::cout << "temp:" << temp << "|green:" << green<< std::endl;
 
-        rtengine::procparams::CropParams crop = params.crop;
+            // params.wb.method = rtengine::procparams::WBEntry::Type::CUSTOM; // temp;
+            params->wb.method = "Custom";
+            params->wb.temperature = temp;
+            // params.toneCurve.expcomp = .6f;
+            params->wb.green = green;
+            
+            ipc->process(ALLNORAW);
+            return;
+        }
 
-        params.crop.enabled = true;
-        params.crop.x = x - 50;
-        params.crop.y = y - 50;
-        params.crop.w = params.crop.h = 100;
-
-        float LAB_l, LAB_l_prev;
         float minL = mL;
         float maxL = minL + .5f;
+        adjustingExposure = LAB_l == 0 || LAB_l < minL || LAB_l > maxL;
 
-        // get the initial value
-        rtengine::IImagefloat* res = adjustExposure(params, LAB_l_prev);
-        float increment = LAB_l_prev < minL ? .05f : -(.05f);
+        if (adjustingExposure == true)
+        {
+            // // get the initial value
+            LAB_l_prev = LAB_l;
+            adjustExposure(params, LAB_l);
+            float increment = LAB_l < minL ? .05f : -(.05f);
+            std::cout << "l:" << LAB_l << "|lprev:" << LAB_l_prev << std::endl;
 
-        // compute how much one point moves us
-        params.toneCurve.expcomp += increment;
-        res = adjustExposure(params, LAB_l);
+            if (LAB_l_prev == 0)
+            {
+                params->toneCurve.expcomp += increment;
+                ipc->process(AUTOEXP);
+                return;
+            }
 
-        // try to match it
-        while (LAB_l < minL || LAB_l > maxL) {
-            // TODO: do not get stuck in an infinite loop
             float diff = abs(LAB_l - LAB_l_prev);
             float toGo = abs(minL - LAB_l);
             std::cout << "diff:" << diff << "|toGo:" << toGo << std::endl;
 
-            increment = LAB_l_prev < minL ? .05f : -(.05f);
-            params.toneCurve.expcomp += std::max(increment * toGo / diff, increment);
-            LAB_l_prev = LAB_l;
-            res = adjustExposure(params, LAB_l);
+            params->toneCurve.expcomp += std::max(increment * toGo / diff, increment);
+
+            ipc->process(AUTOEXP);
+            return;
         }
 
-        params.crop.enabled = false;
-        res = adjustExposure(params, LAB_l);
+        params->resize.enabled = true;
+        params->resize.width = 1920;
+        params->resize.height = 1080;
+
+        // create a processing job with the loaded image and the current processing parameters
+        rtengine::ProcessingJob* job = rtengine::ProcessingJob::create (image, *params);
+
+        // process image. The error is given back in errorcode.
+        int errorCode;
+        rtengine::IImagefloat* res = rtengine::processImage (job, errorCode, nullptr);
         
-        // save image to disk
+        // // save image to disk
         res->saveToFile (path);
-        // save profile as well
-        params.save(strcat(path, ".pp3"));
+        // // save profile as well
+        params->save(strcat(path, ".pp3"));
+
+        delete res;
     }
     
     void setProgressStr(const Glib::ustring& str)
-    {
-        std::cout << str << std::endl;
-    }
+    {}
 
     void setProgress (double p)
-    {
-        std::cout << p << std::endl;
-    }
+    {}
+
+    void error(const Glib::ustring& descr)
+    {}
 
     void setProgressState(bool inProcessing)
     {
-        std::cout << inProcessing << std::endl;
         // get the white balance from one spot
         if (inProcessing == false)
         {
-            double temp, green;
-            ipc->getSpotWB(x, y, 8, temp, green);
-
-            std::cout << "temp:" << temp << "|green:" << green<< std::endl;
-            
-            saveImage(temp, green);
+            saveImage();
         }
-    }
-
-    void error(const Glib::ustring& descr)
-    {
     }
 };
 
@@ -248,19 +329,7 @@ int main (int argc, char* argv[])
     worker->work();
 
     delete worker;
-    // delete ii;
-
-    // TODO: cleanup
-    // rtengine::procparams::ProcParams params;
-
-    // create a processing job with the loaded image and the current processing parameters
-    // rtengine::ProcessingJob* job = rtengine::ProcessingJob::create (ii, params);
-
-    // process image. The error is given back in errorcode.
-    // rtengine::IImagefloat* res = rtengine::processImage (job, errorCode, nullptr);
-
-    // save image to disk
-    // res->saveToFile (argv[2]);
+    delete ii;
 }
 
 int init (char* argv[])
