@@ -384,8 +384,9 @@ int init (char* argv[])
     options.rtSettings.lensfunDbDirectory = LENSFUN_DB_PATH;
 #endif
 
+    options.profilePath = "/tmp/profiles";
     try {
-        Options::load (false);
+        Options::load (true);
     } catch (Options::Error &e) {
         std::cerr << std::endl << "FATAL ERROR:" << std::endl << e.get_msg() << std::endl;
         return -2;
