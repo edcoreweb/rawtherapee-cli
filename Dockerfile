@@ -38,6 +38,6 @@ RUN ./build-rawtherapee
 RUN rm -rf ./programs/rawtherapee
 COPY CMakeLists.txt ./programs/code-rawtherapee/rtgui/CMakeLists.txt
 COPY cli.cc ./programs/code-rawtherapee/rtgui/main-cli-custom.cc
-RUN ./build-rawtherapee
+RUN ./build-rawtherapee -b
 
 CMD ["/bin/bash"]

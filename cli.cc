@@ -147,6 +147,9 @@ public:
         // params.toneCurve.expcomp = .6f;
         params.wb.green = green;
 
+        // Adobe RGB
+        params.icm.workingProfile = "Adobe RGB";
+
         rtengine::procparams::CropParams crop = params.crop;
 
         params.crop.enabled = true;
