@@ -56,6 +56,7 @@ Glib::ustring creditsPath;
 Glib::ustring licensePath;
 Glib::ustring argv1;
 
+
 class IPC : public rtengine::ImProcCoordinator
 {
 public:
@@ -227,7 +228,7 @@ public:
             params->wb.temperature = temp;
             // params.toneCurve.expcomp = .6f;
             params->wb.green = green;
-            
+
             ipc->process(ALLNORAW);
             return;
         }
@@ -271,7 +272,7 @@ public:
         // process image. The error is given back in errorcode.
         int errorCode;
         rtengine::IImagefloat* res = rtengine::processImage (job, errorCode, nullptr);
-        
+
         // // save image to disk
         res->saveToFile (path);
         // // save profile as well
@@ -279,7 +280,7 @@ public:
 
         delete res;
     }
-    
+
     void setProgressStr(const Glib::ustring& str)
     {}
 
@@ -299,6 +300,18 @@ public:
     }
 };
 
+/* Process line command options
+ * Returns
+ *  0 if process in batch has executed
+ *  1 to start GUI (with a dir or file option)
+ *  2 to start GUI because no files found
+ *  -1 if there is an error in parameters
+ *  -2 if an error occurred during processing
+ *  -3 if at least one required procparam file was not found */
+int processLineParams ( int argc, char **argv );
+
+bool dontLoadCache ( int argc, char **argv );
+
 int init (char* argv[]);
 
 int main (int argc, char* argv[])
@@ -314,22 +327,496 @@ int main (int argc, char* argv[])
         exit(1);
     }
 
-    // Load the image given in the first command line parameter
-    rtengine::InitialImage* ii;
-    int errorCode;
-    
-    ii = rtengine::InitialImage::load (argv[1], true, &errorCode, nullptr);
+    if (argc == 6) {
+        // calibrate image for point
+        // Load the image given in the first command line parameter
+        rtengine::InitialImage* ii;
+        int errorCode;
 
-    if (!ii) {
-        std::cout << "Input file not supported." << std::endl;
-        exit(2);
+        ii = rtengine::InitialImage::load (argv[1], true, &errorCode, nullptr);
+
+        if (!ii) {
+//            std::cout << "Input file not supported." << std::endl;
+            exit(2);
+        }
+
+        Worker* worker = new Worker(ii, argv[2], atoi(argv[3]), atoi(argv[4]), atof(argv[5]));
+        worker->work();
+
+        delete worker;
+        delete ii;
+    } else if (argc > 6) {
+        // generate thumbnail
+        int ret = 0;
+
+        ret = processLineParams (argc, argv);
+    }
+}
+
+void deleteProcParams (std::vector<rtengine::procparams::PartialProfile*> &pparams)
+{
+    for (unsigned int i = 0; i < pparams.size(); i++) {
+        pparams[i]->deleteInstance();
+        delete pparams[i];
+        pparams[i] = NULL;
     }
 
-    Worker* worker = new Worker(ii, argv[2], atoi(argv[3]), atoi(argv[4]), atof(argv[5]));
-    worker->work();
+    return;
+}
 
-    delete worker;
-    delete ii;
+
+bool dontLoadCache ( int argc, char **argv )
+{
+    for (int iArg = 1; iArg < argc; iArg++) {
+        Glib::ustring currParam (argv[iArg]);
+
+        if ( currParam.length() > 1 && currParam.at(0) == '-' && currParam.at(1) == 'q' ) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+int processLineParams ( int argc, char **argv )
+{
+    rtengine::procparams::PartialProfile *rawParams = nullptr, *imgParams = nullptr;
+    std::vector<Glib::ustring> inputFiles;
+    Glib::ustring outputPath;
+    std::vector<rtengine::procparams::PartialProfile*> processingParams;
+    bool outputDirectory = false;
+    bool leaveUntouched = false;
+    bool overwriteFiles = false;
+    bool sideProcParams = false;
+    bool copyParamsFile = false;
+    bool skipIfNoSidecar = false;
+    bool allExtensions = false;
+    bool useDefault = false;
+    unsigned int sideCarFilePos = 0;
+    int compression = 92;
+    int subsampling = 3;
+    int bits = -1;
+    bool isFloat = false;
+    std::string outputType;
+    unsigned errors = 0;
+    int rawWidth = 0;
+    int rawHeight = 0;
+    int resultImageWidth = 0;
+    int resultImageHeight = 0;
+
+    for ( int iArg = 1; iArg < argc; iArg++) {
+        Glib::ustring currParam (argv[iArg]);
+        if ( currParam.empty() ) {
+            continue;
+        }
+
+        if ( currParam.at (0) == '-' && currParam.size() > 1) {
+            switch ( currParam.at (1) ) {
+                case '-':
+                    // GTK --argument, we're skipping it
+                    break;
+
+                case 'o': // outputfile or dir
+                    if ( iArg + 1 < argc ) {
+                        iArg++;
+                        outputPath = Glib::ustring (Glib::filename_to_utf8 (argv[iArg]));
+
+                        if (outputPath.substr (0, 9) == "/dev/null") {
+                            outputPath.assign ("/dev/null"); // removing any useless chars or filename
+                            outputDirectory = false;
+                            leaveUntouched = true;
+                        } else if (Glib::file_test (outputPath, Glib::FILE_TEST_IS_DIR)) {
+                            outputDirectory = true;
+                        }
+                    }
+
+                    break;
+
+                case 'p': // processing parameters for all inputs; all set procparams are required, so
+
+                    // RT stop if any of them can't be loaded for any reason.
+                    if ( iArg + 1 < argc ) {
+                        iArg++;
+                        Glib::ustring fname (Glib::filename_to_utf8 (argv[iArg]));
+
+                        if (fname.at (0) == '-') {
+                            // std::cerr << "Error: filename missing next to the -p switch." << std::endl;
+                            deleteProcParams (processingParams);
+                            return -3;
+                        }
+
+                        rtengine::procparams::PartialProfile* currentParams = new rtengine::procparams::PartialProfile (true);
+
+                        if (! (currentParams->load ( fname ))) {
+                            processingParams.push_back (currentParams);
+                        } else {
+                            // std::cerr << "Error: \"" << fname << "\" not found." << std::endl;
+                            deleteProcParams (processingParams);
+                            return -3;
+                        }
+                    }
+
+                    break;
+
+                case 'd':
+                    useDefault = true;
+                    break;
+
+                case 'Y':
+                    overwriteFiles = true;
+                    break;
+
+                case 'c': // MUST be last option
+                    while (iArg + 1 < argc) {
+                        iArg++;
+                        Glib::ustring argument (Glib::filename_to_utf8 (argv[iArg]));
+
+                        if (!Glib::file_test (argument, Glib::FILE_TEST_EXISTS)) {
+                            // std::cout << "\"" << argument << "\"  doesn't exist!" << std::endl;
+                            continue;
+                        }
+
+                        if (Glib::file_test (argument, Glib::FILE_TEST_IS_REGULAR)) {
+                            bool notAll = allExtensions && !options.is_parse_extention (argument);
+                            bool notRetained = !allExtensions && !options.has_retained_extention (argument);
+
+                            if (notAll || notRetained) {
+                                if (notAll) {
+                                    // std::cout << "\"" << argument << "\"  is not one of the parsed extensions. Image skipped." << std::endl;
+                                } else if (notRetained) {
+                                    // std::cout << "\"" << argument << "\"  is not one of the selected parsed extensions. Image skipped." << std::endl;
+                                }
+                            } else {
+                                inputFiles.emplace_back (argument);
+                            }
+
+                            continue;
+
+                        }
+
+                        if (Glib::file_test (argument, Glib::FILE_TEST_IS_DIR)) {
+
+                            auto dir = Gio::File::create_for_path (argument);
+
+                            if (!dir || !dir->query_exists()) {
+                                continue;
+                            }
+
+                            try {
+
+                                auto enumerator = dir->enumerate_children ("standard::name,standard::type");
+
+                                while (auto file = enumerator->next_file()) {
+
+                                    const auto fileName = Glib::build_filename (argument, file->get_name());
+                                    bool isDir = file->get_file_type() == Gio::FILE_TYPE_DIRECTORY;
+                                    bool notAll = allExtensions && !options.is_parse_extention (fileName);
+                                    bool notRetained = !allExtensions && !options.has_retained_extention (fileName);
+
+                                    if (isDir || notAll || notRetained) {
+                                        if (isDir) {
+                                            // std::cout << "\"" << fileName << "\"  is a folder. Folder skipped" << std::endl;
+                                        } else if (notAll) {
+                                            // std::cout << "\"" << fileName << "\"  is not one of the parsed extensions. Image skipped." << std::endl;
+                                        } else if (notRetained) {
+                                            // std::cout << "\"" << fileName << "\"  is not one of the selected parsed extensions. Image skipped." << std::endl;
+                                        }
+
+                                        continue;
+
+                                    }
+
+                                    if (sideProcParams && skipIfNoSidecar) {
+                                        // look for the sidecar proc params
+                                        if (!Glib::file_test (fileName + paramFileExtension, Glib::FILE_TEST_EXISTS)) {
+                                            // std::cout << "\"" << fileName << "\"  has no side-car file. Image skipped." << std::endl;
+                                            continue;
+                                        }
+                                    }
+
+                                    inputFiles.emplace_back (fileName);
+                                }
+
+                            } catch (Glib::Exception&) {}
+
+                            continue;
+                        }
+
+                        // std::cerr << "\"" << argument << "\" is neither a regular file nor a directory." << std::endl;
+                    }
+
+                    break;
+
+                default: {
+                    break;
+                }
+            }
+        } else {
+            argv1 = Glib::ustring (Glib::filename_to_utf8 (argv[iArg]));
+
+            if ( outputDirectory ) {
+                options.savePathFolder = outputPath;
+                options.saveUsePathTemplate = false;
+            } else {
+                options.saveUsePathTemplate = true;
+
+                if (options.savePathTemplate.empty())
+                    // If the save path template is empty, we use its default value
+                {
+                    options.savePathTemplate = "%p1/converted/%f";
+                }
+            }
+
+            if (outputType == "jpg") {
+                options.saveFormat.format = outputType;
+                options.saveFormat.jpegQuality = compression;
+                options.saveFormat.jpegSubSamp = subsampling;
+            } else if (outputType == "tif") {
+                options.saveFormat.format = outputType;
+            } else if (outputType == "png") {
+                options.saveFormat.format = outputType;
+            }
+
+            break;
+        }
+    }
+
+    if (bits == -1) {
+        if (outputType == "jpg") {
+            bits = 8;
+        } else if (outputType == "png") {
+            bits = 8;
+        } else if (outputType == "tif") {
+            bits = 16;
+        } else {
+            bits = 8;
+        }
+    }
+
+    if ( !argv1.empty() ) {
+        return 1;
+    }
+
+    if ( inputFiles.empty() ) {
+        return 2;
+    }
+
+    if (useDefault) {
+        rawParams = new rtengine::procparams::PartialProfile (true, true);
+        Glib::ustring profPath = options.findProfilePath (options.defProfRaw);
+
+        if (options.is_defProfRawMissing() || profPath.empty() || (profPath != DEFPROFILE_DYNAMIC && rawParams->load (profPath == DEFPROFILE_INTERNAL ? DEFPROFILE_INTERNAL : Glib::build_filename (profPath, Glib::path_get_basename (options.defProfRaw) + paramFileExtension)))) {
+            // std::cerr << "Error: default raw processing profile not found." << std::endl;
+            rawParams->deleteInstance();
+            delete rawParams;
+            deleteProcParams (processingParams);
+            return -3;
+        }
+
+        imgParams = new rtengine::procparams::PartialProfile (true);
+        profPath = options.findProfilePath (options.defProfImg);
+
+        if (options.is_defProfImgMissing() || profPath.empty() || (profPath != DEFPROFILE_DYNAMIC && imgParams->load (profPath == DEFPROFILE_INTERNAL ? DEFPROFILE_INTERNAL : Glib::build_filename (profPath, Glib::path_get_basename (options.defProfImg) + paramFileExtension)))) {
+            // std::cerr << "Error: default non-raw processing profile not found." << std::endl;
+            imgParams->deleteInstance();
+            delete imgParams;
+            rawParams->deleteInstance();
+            delete rawParams;
+            deleteProcParams (processingParams);
+            return -3;
+        }
+    }
+
+    for ( size_t iFile = 0; iFile < inputFiles.size(); iFile++) {
+
+        // Has to be reinstanciated at each profile to have a ProcParams object with default values
+        rtengine::procparams::ProcParams currentParams;
+
+        Glib::ustring inputFile = inputFiles[iFile];
+        // std::cout << "Output is " << bits << "-bit " << (isFloat ? "floating-point" : "integer") << "." << std::endl;
+        // std::cout << "Processing: " << inputFile << std::endl;
+
+        rtengine::InitialImage* ii = nullptr;
+        rtengine::ProcessingJob* job = nullptr;
+        int errorCode;
+        bool isRaw = false;
+
+        Glib::ustring outputFile;
+
+        if ( outputType.empty() ) {
+            outputType = "jpg";
+        }
+
+        if ( outputPath.empty() ) {
+            Glib::ustring s = inputFile;
+            Glib::ustring::size_type ext = s.find_last_of ('.');
+            outputFile = s.substr (0, ext) + "." + outputType;
+        } else if ( outputDirectory ) {
+            Glib::ustring s = Glib::path_get_basename ( inputFile );
+            Glib::ustring::size_type ext = s.find_last_of ('.');
+            outputFile = Glib::build_filename (outputPath, s.substr (0, ext) + "." + outputType);
+        } else {
+            if (leaveUntouched) {
+                outputFile = outputPath;
+            } else {
+                Glib::ustring s = outputPath;
+                Glib::ustring::size_type ext = s.find_last_of ('.');
+                outputFile = s.substr (0, ext) + "." + outputType;
+            }
+        }
+
+        if ( inputFile == outputFile) {
+            // std::cerr << "Cannot overwrite: " << inputFile << std::endl;
+            continue;
+        }
+
+        if ( !overwriteFiles && Glib::file_test ( outputFile, Glib::FILE_TEST_EXISTS ) ) {
+            // std::cerr << outputFile  << " already exists: use -Y option to overwrite. This image has been skipped." << std::endl;
+            continue;
+        }
+
+        // Load the image
+        isRaw = true;
+        Glib::ustring ext = getExtension (inputFile);
+
+        if (ext.lowercase() == "jpg" || ext.lowercase() == "jpeg" || ext.lowercase() == "tif" || ext.lowercase() == "tiff" || ext.lowercase() == "png") {
+            isRaw = false;
+        }
+
+        ii = rtengine::InitialImage::load ( inputFile, isRaw, &errorCode, nullptr );
+
+        if (!ii) {
+            errors++;
+            // std::cerr << "Error loading file: " << inputFile << std::endl;
+            continue;
+        }
+
+        ii->getImageSource()->getFullSize(rawWidth, rawHeight);
+
+        std::cout << "{" << std::endl;
+        std::cout << "\"rawWidth\" => " << rawWidth << "," << std::endl;
+        std::cout << "\"rawHeight\" => " << rawHeight << "," << std::endl;
+
+        if (useDefault) {
+            if (isRaw) {
+                if (options.defProfRaw == DEFPROFILE_DYNAMIC) {
+                    rawParams->deleteInstance();
+                    delete rawParams;
+                    rawParams = ProfileStore::getInstance()->loadDynamicProfile (ii->getMetaData());
+                }
+
+                // std::cout << "  Merging default raw processing profile." << std::endl;
+                rawParams->applyTo (&currentParams);
+            } else {
+                if (options.defProfImg == DEFPROFILE_DYNAMIC) {
+                    imgParams->deleteInstance();
+                    delete imgParams;
+                    imgParams = ProfileStore::getInstance()->loadDynamicProfile (ii->getMetaData());
+                }
+
+                // std::cout << "  Merging default non-raw processing profile." << std::endl;
+                imgParams->applyTo (&currentParams);
+            }
+        }
+
+        bool sideCarFound = false;
+        unsigned int i = 0;
+
+        // Iterate the procparams file list in order to build the final ProcParams
+        do {
+            if (sideProcParams && i == sideCarFilePos) {
+                // using the sidecar file
+                Glib::ustring sideProcessingParams = inputFile + paramFileExtension;
+
+                // the "load" method don't reset the procparams values anymore, so values found in the procparam file override the one of currentParams
+                if ( !Glib::file_test ( sideProcessingParams, Glib::FILE_TEST_EXISTS ) || currentParams.load ( sideProcessingParams )) {
+                    // std::cerr << "Warning: sidecar file requested but not found for: " << sideProcessingParams << std::endl;
+                } else {
+                    sideCarFound = true;
+                    // std::cout << "  Merging sidecar procparams." << std::endl;
+                }
+            }
+
+            if ( processingParams.size() > i  ) {
+                // std::cout << "  Merging procparams #" << i << std::endl;
+                processingParams[i]->applyTo (&currentParams);
+            }
+
+            i++;
+        } while (i < processingParams.size() + (sideProcParams ? 1 : 0));
+
+        if ( sideProcParams && !sideCarFound && skipIfNoSidecar ) {
+            delete ii;
+            errors++;
+            // std::cerr << "Error: no sidecar procparams found for: " << inputFile << std::endl;
+            continue;
+        }
+
+        job = rtengine::ProcessingJob::create (ii, currentParams, false);
+
+        if ( !job ) {
+            errors++;
+            // std::cerr << "Error creating processing for: " << inputFile << std::endl;
+            ii->decreaseRef();
+            continue;
+        }
+
+        // Process image
+        rtengine::IImagefloat* resultImage = rtengine::processImage (job, errorCode, nullptr);
+
+        if ( !resultImage ) {
+            errors++;
+            // std::cerr << "Error processing: " << inputFile << std::endl;
+            rtengine::ProcessingJob::destroy ( job );
+            continue;
+        }
+
+        resultImageWidth = resultImage->getWidth();
+        resultImageHeight = resultImage->getHeight();
+
+        std::cout << "\"resultImageWidth\" => " << resultImageWidth << "," << std::endl;
+        std::cout << "\"resultImageHeight\" => " << resultImageHeight << std::endl;
+
+        std::cout << "}" << std::endl;
+
+        // save image to disk
+        if ( outputType == "jpg" ) {
+            errorCode = resultImage->saveAsJPEG ( outputFile, compression, subsampling );
+        } else if ( outputType == "tif" ) {
+            errorCode = resultImage->saveAsTIFF ( outputFile, bits, isFloat, compression == 0  );
+        } else if ( outputType == "png" ) {
+            errorCode = resultImage->saveAsPNG ( outputFile, bits );
+        } else {
+            errorCode = resultImage->saveToFile (outputFile);
+        }
+
+        if (errorCode) {
+            errors++;
+            // std::cerr << "Error saving to: " << outputFile << std::endl;
+        } else {
+            if ( copyParamsFile ) {
+                Glib::ustring outputProcessingParams = outputFile + paramFileExtension;
+                currentParams.save ( outputProcessingParams );
+            }
+        }
+
+        ii->decreaseRef();
+        resultImage->free();
+    }
+
+    if (imgParams) {
+        imgParams->deleteInstance();
+        delete imgParams;
+    }
+
+    if (rawParams) {
+        rawParams->deleteInstance();
+        delete rawParams;
+    }
+
+    deleteProcParams (processingParams);
+
+    return errors > 0 ? -2 : 0;
 }
 
 int init (char* argv[])
@@ -388,39 +875,39 @@ int init (char* argv[])
     try {
         Options::load (true);
     } catch (Options::Error &e) {
-        std::cerr << std::endl << "FATAL ERROR:" << std::endl << e.get_msg() << std::endl;
+        // std::cerr << std::endl << "FATAL ERROR:" << std::endl << e.get_msg() << std::endl;
         return -2;
     }
 
     if (options.is_defProfRawMissing()) {
         options.defProfRaw = DEFPROFILE_RAW;
-        std::cerr << std::endl
-                  << "The default profile for raw photos could not be found or is not set." << std::endl
-                  << "Please check your profiles' directory, it may be missing or damaged." << std::endl
-                  << "\"" << DEFPROFILE_RAW << "\" will be used instead." << std::endl << std::endl;
+        // std::cerr << std::endl
+        //           << "The default profile for raw photos could not be found or is not set." << std::endl
+        //           << "Please check your profiles' directory, it may be missing or damaged." << std::endl
+        //           << "\"" << DEFPROFILE_RAW << "\" will be used instead." << std::endl << std::endl;
     }
 
     if (options.is_bundledDefProfRawMissing()) {
-        std::cerr << std::endl
-                  << "The bundled profile \"" << options.defProfRaw << "\" could not be found!" << std::endl
-                  << "Your installation could be damaged." << std::endl
-                  << "Default internal values will be used instead." << std::endl << std::endl;
+        // std::cerr << std::endl
+        //           << "The bundled profile \"" << options.defProfRaw << "\" could not be found!" << std::endl
+        //           << "Your installation could be damaged." << std::endl
+        //           << "Default internal values will be used instead." << std::endl << std::endl;
         options.defProfRaw = DEFPROFILE_INTERNAL;
     }
 
     if (options.is_defProfImgMissing()) {
         options.defProfImg = DEFPROFILE_IMG;
-        std::cerr << std::endl
-                  << "The default profile for non-raw photos could not be found or is not set." << std::endl
-                  << "Please check your profiles' directory, it may be missing or damaged." << std::endl
-                  << "\"" << DEFPROFILE_IMG << "\" will be used instead." << std::endl << std::endl;
+        // std::cerr << std::endl
+        //           << "The default profile for non-raw photos could not be found or is not set." << std::endl
+        //           << "Please check your profiles' directory, it may be missing or damaged." << std::endl
+        //           << "\"" << DEFPROFILE_IMG << "\" will be used instead." << std::endl << std::endl;
     }
 
     if (options.is_bundledDefProfImgMissing()) {
-        std::cerr << std::endl
-                  << "The bundled profile " << options.defProfImg << " could not be found!" << std::endl
-                  << "Your installation could be damaged." << std::endl
-                  << "Default internal values will be used instead." << std::endl << std::endl;
+        // std::cerr << std::endl
+        //           << "The bundled profile " << options.defProfImg << " could not be found!" << std::endl
+        //           << "Your installation could be damaged." << std::endl
+        //           << "Default internal values will be used instead." << std::endl << std::endl;
         options.defProfImg = DEFPROFILE_INTERNAL;
     }
 
@@ -431,14 +918,14 @@ int init (char* argv[])
     // Move the old path to the new one if the new does not exist
     if (Glib::file_test (Glib::build_filename (options.rtdir, "cache"), Glib::FILE_TEST_IS_DIR) && !Glib::file_test (options.cacheBaseDir, Glib::FILE_TEST_IS_DIR)) {
         if (g_rename (Glib::build_filename (options.rtdir, "cache").c_str (), options.cacheBaseDir.c_str ()) == -1) {
-            std::cout << "g_rename " <<  Glib::build_filename (options.rtdir, "cache").c_str () << " => " << options.cacheBaseDir.c_str () << " failed." << std::endl;
+            // std::cout << "g_rename " <<  Glib::build_filename (options.rtdir, "cache").c_str () << " => " << options.cacheBaseDir.c_str () << " failed." << std::endl;
         }
     }
 
 #endif
 
     // printing RT's version in all case, particularly useful for the 'verbose' mode, but also for the batch processing
-    std::cout << "RawTherapee, version " << RTVERSION << ", command line." << std::endl;
+    // std::cout << "RawTherapee, version " << RTVERSION << ", command line." << std::endl;
 
     return 0;
 }

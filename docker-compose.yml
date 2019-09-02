@@ -6,7 +6,7 @@ services:
   app:
     # we want to use the image which is build from our Dockerfile
     build:
-      context: ./
+      context: ./aws
       dockerfile: Dockerfile
     volumes:
     - ./cli.cc:/root/programs/code-rawtherapee/rtgui/main-cli-custom.cc
