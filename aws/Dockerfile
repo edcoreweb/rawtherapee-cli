@@ -52,13 +52,13 @@ RUN yum remove libtiff-devel -y \
 # Install rawtherapee
 RUN wget https://raw.githubusercontent.com/Beep6581/RawTherapee/dev/tools/build-rawtherapee -O build-rawtherapee
 RUN chmod +x build-rawtherapee
-RUN ./build-rawtherapee
+RUN ./build-rawtherapee -b
 
 # Build our custom cli
 RUN rm -rf /root/programs/rawtherapee
 COPY CMakeLists.txt /root/programs/code-rawtherapee/rtgui/CMakeLists.txt
 COPY cli.cc /root/programs/code-rawtherapee/rtgui/main-cli-custom.cc
-RUN ./build-rawtherapee
+RUN ./build-rawtherapee -b
 
 WORKDIR /root
 

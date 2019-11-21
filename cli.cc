@@ -81,7 +81,7 @@ private:
     bool adjustingExposure = true;
     float LAB_l = 0, LAB_l_prev = 0;
 
-    rtengine::IImage8 *cropImage;
+    rtengine::IImage8 *cropImage = nullptr;
     rtengine::DetailedCrop* crop;
 public:
     Worker(rtengine::InitialImage* ii, char* p, int xc, int yc, float minL)
@@ -179,9 +179,17 @@ public:
         }
 
         *ipcParams = *params;
-        delete params;
+        if (params) {
+            delete params;
+        }
 
-        ipc->process(ALL);
+        if (ipc != nullptr) {
+            ipc->process(ALL);
+        }
+
+        if (ipcParams) {
+            delete ipcParams;
+        }
     }
 
     rtengine::procparams::PartialProfile* getPartialProfile()
@@ -347,9 +355,7 @@ int main (int argc, char* argv[])
         delete ii;
     } else if (argc > 6) {
         // generate thumbnail
-        int ret = 0;
-
-        ret = processLineParams (argc, argv);
+        processLineParams (argc, argv);
     }
 }
 
@@ -693,10 +699,6 @@ int processLineParams ( int argc, char **argv )
 
         ii->getImageSource()->getFullSize(rawWidth, rawHeight);
 
-        std::cout << "{" << std::endl;
-        std::cout << "\"rawWidth\" => " << rawWidth << "," << std::endl;
-        std::cout << "\"rawHeight\" => " << rawHeight << "," << std::endl;
-
         if (useDefault) {
             if (isRaw) {
                 if (options.defProfRaw == DEFPROFILE_DYNAMIC) {
@@ -774,10 +776,11 @@ int processLineParams ( int argc, char **argv )
         resultImageWidth = resultImage->getWidth();
         resultImageHeight = resultImage->getHeight();
 
-        std::cout << "\"resultImageWidth\" => " << resultImageWidth << "," << std::endl;
-        std::cout << "\"resultImageHeight\" => " << resultImageHeight << std::endl;
-
-        std::cout << "}" << std::endl;
+        // output rawWidth, rawHeight, width, height
+        std::cout << "{\"rawWidth\":\"" << rawWidth << "\",";
+        std::cout << "\"rawHeight\":\"" << rawHeight << "\",";
+        std::cout << "\"width\":\"" << resultImageWidth << "\",";
+        std::cout << "\"height\":\"" << resultImageHeight << "\"}";
 
         // save image to disk
         if ( outputType == "jpg" ) {

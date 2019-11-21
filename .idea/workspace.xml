@@ -1,0 +1,598 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="54ea05e9-dfc0-49a9-97df-30f61add80dd" name="Default Changelist" comment="Image profile &amp; processing">
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon 1000D .dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon 10D 100mm dcp.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon 1100D (T3) 100mm .dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon 1D X.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon 300D .dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon 30D 100 mm.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon 350D .dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon 400D .dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon 450D .dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon 500D (T1i) 100 mm.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon 50D.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon 5D Mark II .dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon 5D Mark III 100 mm .dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon 5D Mk1.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon 600D .dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon 60D.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon 650D .dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon 6D .dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon 700D (T5i) 100mm .dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon 700D .dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon 70D 100 mmdcp.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon 7D Mark II.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon 7D Mk I 100mm dcp.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon 80D.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon D40 100 mm.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 1000D.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 1000D_A.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 1000D_B.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 100D.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 10D .dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 1100D (T3).dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 1300D.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 1Ds Mk II.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 1Dx Mk II.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 20D .dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 20D.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 300D.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 30D.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 350D.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 400D.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 40D.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 450D.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 500D (T1i) .dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 50D.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 550D.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 5D Mark IV_2.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 5D Mk I.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 5D Mk II.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 5D Mk III.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 5D Mk IV.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 5Ds R.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 600D.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 60D.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 650D.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 6D Mark II.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 6D.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 700D (T5i).dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 700D.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 70D.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 750D.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 760D.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 77D.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 77D_1.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 7D ISO.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 7D Mark II 16_200.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 7D Mark II 22_100.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 7D Mark II 22_200.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 7D Mk  I.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 7D Mk II.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 800D.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS 80D.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Canon EOS-1D X Mark II .dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Fujifilm FinePix S5Pro.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Fujifilm X-T2 vers 5.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D100 85 mm.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D100.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D200 85 mm .dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D200.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D3 60mm .dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D3.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D300 .dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D300.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D3000.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D300s.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D3100 .dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D3100.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D3200.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D3300 85 mm.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D3300.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D3400.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D3X.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D3X_1 .dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D4s.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D5.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D50 vers 1.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D50 vers 2.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D50 vers 3.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D5000.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D500_1.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D500_2.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D5100 85mm p_e.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D5100.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D5200 .dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D5200.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D5300 85 mm p_e.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D5300.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D5300_1.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D5500.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D5600.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D600.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D610.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D700..dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D700.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D7000 .dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D7000.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D70s.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D7100 .dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D7100.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D7200 .dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D7200.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D750..dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D750.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D7500.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D80 .dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D80.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D800..dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D800.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D800E.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D810..dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D810.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D810A.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D850 ver3.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D850 vers 1.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D850 vers 2.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D850 vers 3.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D850.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon D90.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Nikon Df.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Olympus E-3_B.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Olympus E-M1 Mark II.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Olympus E-M1.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Olympus E-M1_1.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Olympus E-M1_2.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Olympus TG-4.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/PENTAX K-5.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/PENTAX K20D.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Panasonic DMC-G7.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Panasonic DMC-GX1.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Sigma SD-1.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Sony A200.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/Sony ILCE-7M3_1.dcp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/bin/dcpprofiles/camera_model_aliases.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/aws/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Canon EOS 100D.dcp" beforeDir="false" afterPath="$PROJECT_DIR$/aws/bin/dcpprofiles/Canon EOS 100D.dcp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Canon EOS 1300D.dcp" beforeDir="false" afterPath="$PROJECT_DIR$/aws/bin/dcpprofiles/Canon EOS 1300D.dcp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Canon EOS 20D.dcp" beforeDir="false" afterPath="$PROJECT_DIR$/aws/bin/dcpprofiles/Canon EOS 20D.dcp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Canon EOS 400D.dcp" beforeDir="false" afterPath="$PROJECT_DIR$/aws/bin/dcpprofiles/Canon EOS 400D.dcp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Canon EOS 40D.dcp" beforeDir="false" afterPath="$PROJECT_DIR$/aws/bin/dcpprofiles/Canon EOS 40D.dcp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Canon EOS 450D.dcp" beforeDir="false" afterPath="$PROJECT_DIR$/aws/bin/dcpprofiles/Canon EOS 450D.dcp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Canon EOS 50D.dcp" beforeDir="false" afterPath="$PROJECT_DIR$/aws/bin/dcpprofiles/Canon EOS 50D.dcp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Canon EOS 550D.dcp" beforeDir="false" afterPath="$PROJECT_DIR$/aws/bin/dcpprofiles/Canon EOS 550D.dcp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Canon EOS 5D Mark III.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Canon EOS 5D.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Canon EOS 600D.dcp" beforeDir="false" afterPath="$PROJECT_DIR$/aws/bin/dcpprofiles/Canon EOS 600D.dcp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Canon EOS 60D.dcp" beforeDir="false" afterPath="$PROJECT_DIR$/aws/bin/dcpprofiles/Canon EOS 60D.dcp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Canon EOS 650D.dcp" beforeDir="false" afterPath="$PROJECT_DIR$/aws/bin/dcpprofiles/Canon EOS 650D.dcp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Canon EOS 6D Mark II.dcp" beforeDir="false" afterPath="$PROJECT_DIR$/aws/bin/dcpprofiles/Canon EOS 6D Mark II.dcp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Canon EOS 6D.dcp" beforeDir="false" afterPath="$PROJECT_DIR$/aws/bin/dcpprofiles/Canon EOS 6D.dcp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Canon EOS 7D Mark II.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Canon EOS 7D.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Canon EOS D60.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Canon EOS-1D Mark III.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Canon PowerShot G10.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Canon PowerShot G12.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Canon PowerShot G7 X.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Canon PowerShot S110.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/FUJIFILM FinePix F600EXR.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/FUJIFILM GFX 50R.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/FUJIFILM X-Pro2.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/FUJIFILM X-S1.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/FUJIFILM X-T1.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/FUJIFILM X-T20.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/FUJIFILM X100S.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/FUJIFILM X100T.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Fujifilm FinePix S9500.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Fujifilm X-E1.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Fujifilm X-E2.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/LG Mobile LG-H815.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Leaf Aptus 75.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/MINOLTA DYNAX 7D.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/NIKON COOLPIX P7800.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/NIKON D300.dcp" beforeDir="false" afterPath="$PROJECT_DIR$/aws/bin/dcpprofiles/NIKON D300.dcp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/NIKON D50.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/NIKON D5000.dcp" beforeDir="false" afterPath="$PROJECT_DIR$/aws/bin/dcpprofiles/NIKON D5000.dcp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/NIKON D5600.dcp" beforeDir="false" afterPath="$PROJECT_DIR$/aws/bin/dcpprofiles/NIKON D5600.dcp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/NIKON D600.dcp" beforeDir="false" afterPath="$PROJECT_DIR$/aws/bin/dcpprofiles/NIKON D600.dcp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/NIKON D700.dcp" beforeDir="false" afterPath="$PROJECT_DIR$/aws/bin/dcpprofiles/NIKON D700.dcp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/NIKON D70s.dcp" beforeDir="false" afterPath="$PROJECT_DIR$/aws/bin/dcpprofiles/NIKON D70s.dcp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/NIKON D7200.dcp" beforeDir="false" afterPath="$PROJECT_DIR$/aws/bin/dcpprofiles/NIKON D7200.dcp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/NIKON D750.dcp" beforeDir="false" afterPath="$PROJECT_DIR$/aws/bin/dcpprofiles/NIKON D750.dcp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/NIKON D80.dcp" beforeDir="false" afterPath="$PROJECT_DIR$/aws/bin/dcpprofiles/NIKON D80.dcp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/NIKON D800E.dcp" beforeDir="false" afterPath="$PROJECT_DIR$/aws/bin/dcpprofiles/NIKON D800E.dcp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/NIKON D810.dcp" beforeDir="false" afterPath="$PROJECT_DIR$/aws/bin/dcpprofiles/NIKON D810.dcp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Nikon D200.dcp" beforeDir="false" afterPath="$PROJECT_DIR$/aws/bin/dcpprofiles/Nikon D200.dcp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Nikon D3000.dcp" beforeDir="false" afterPath="$PROJECT_DIR$/aws/bin/dcpprofiles/Nikon D3000.dcp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Nikon D3100.dcp" beforeDir="false" afterPath="$PROJECT_DIR$/aws/bin/dcpprofiles/Nikon D3100.dcp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Nikon D3S.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Nikon D5100.dcp" beforeDir="false" afterPath="$PROJECT_DIR$/aws/bin/dcpprofiles/Nikon D5100.dcp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Nikon D7000.dcp" beforeDir="false" afterPath="$PROJECT_DIR$/aws/bin/dcpprofiles/Nikon D7000.dcp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/OLYMPUS E-510.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/OLYMPUS E-M10.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/OLYMPUS E-M1MarkII.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Olympus E-1.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Olympus E-520.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Olympus E-M5.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Olympus E-P2.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Olympus XZ-1.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/PENTAX K-5 II.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/PENTAX K-5.dcp" beforeDir="false" afterPath="$PROJECT_DIR$/aws/bin/dcpprofiles/PENTAX K-5.dcp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/PENTAX K10D.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Panasonic DC-G9.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Panasonic DC-GX9.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Panasonic DC-S1.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Panasonic DC-TZ91.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Panasonic DMC-FZ1000.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Panasonic DMC-FZ150.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Panasonic DMC-FZ35.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Panasonic DMC-FZ38.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Panasonic DMC-G1.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Panasonic DMC-G3.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Panasonic DMC-G5.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Panasonic DMC-GH1.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Panasonic DMC-GH2.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Panasonic DMC-GX85.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Pentax K-r.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Pentax K200D.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/RICOH PENTAX K-1.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/RICOH PENTAX K-3.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/SONY DSLR-A580.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/SONY ILCE-6000.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/SONY ILCE-7M2.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/SONY ILCE-7M3.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/SONY ILCE-7RM3.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/SONY SLT-A99V.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Sony DSLR-A700.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Sony DSLR-A900.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Sony NEX-5N.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/Sony SLT-A55V.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/YI TECHNOLOGY M1.dcp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/bin/dcpprofiles/camera_model_aliases.json" beforeDir="false" afterPath="$PROJECT_DIR$/aws/bin/dcpprofiles/camera_model_aliases.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aws/lib/libm.so.6" beforeDir="false" afterPath="$PROJECT_DIR$/aws/lib/libm.so.6" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cli.cc" beforeDir="false" afterPath="$PROJECT_DIR$/cli.cc" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cli.cc">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="15810">
+              <caret line="930" column="39" selection-start-line="930" selection-start-column="39" selection-end-line="930" selection-end-column="39" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/aws/Dockerfile">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="612">
+              <caret line="36" column="22" selection-start-line="36" selection-start-column="22" selection-end-line="36" selection-end-column="22" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Dockerfile">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="680">
+              <caret line="40" column="26" selection-start-line="40" selection-start-column="26" selection-end-line="40" selection-end-column="26" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/docker-compose.yml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="85">
+              <caret line="5" column="6" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/aws/cli.cc">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="152">
+              <caret line="910" column="86" selection-start-line="910" selection-start-column="86" selection-end-line="910" selection-end-column="86" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>outputPath</find>
+      <find>WIN32</find>
+      <find>fname_to_utf8</find>
+      <find>fast_export</find>
+      <find>ool fast_</find>
+      <find>== 6</find>
+      <find>cropImage-&gt;getWidth();</find>
+      <find>processLineParams</find>
+      <find>rging default raw processing profil</find>
+      <find>processingParams</find>
+      <find>image</find>
+      <find>IImage8</find>
+      <find>ii</find>
+      <find>cropImage</find>
+      <find>StagedImageProcessor</find>
+      <find>getfull</find>
+      <find>false</find>
+      <find>*ii</find>
+      <find>Processing:</find>
+      <find>width:</find>
+      <find>getsi</find>
+      <find>2</find>
+      <find>width</find>
+      <find>std::</find>
+      <find>staged</find>
+      <find>std::cout</find>
+      <find>process</find>
+      <find>ipc</find>
+      <find>saveImage</find>
+      <find>build-rawtherapee</find>
+    </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="UPDATE_TYPE" value="REBASE" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/Makefile" />
+        <option value="$PROJECT_DIR$/Dockerfile" />
+        <option value="$PROJECT_DIR$/cli.cc" />
+        <option value="$PROJECT_DIR$/docker-compose.yml" />
+        <option value="$PROJECT_DIR$/aws/Dockerfile" />
+        <option value="$PROJECT_DIR$/aws/cli.cc" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-8" />
+    <option name="width" value="1936" />
+    <option name="height" value="1047" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="rawtherapee-cli" type="b2602c69:ProjectViewProjectNode" />
+              <item name="rawtherapee-cli" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="rawtherapee-cli" type="b2602c69:ProjectViewProjectNode" />
+              <item name="rawtherapee-cli" type="462c0819:PsiDirectoryNode" />
+              <item name="aws" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="D:/Qlik/Load_scripts/ginsights" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Work\rawtherapee-cli\input\bin" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Work\rawtherapee-cli\input" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="54ea05e9-dfc0-49a9-97df-30f61add80dd" name="Default Changelist" comment="" />
+      <created>1562168488744</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1562168488744</updated>
+      <workItem from="1562168490008" duration="781000" />
+      <workItem from="1562940834087" duration="106000" />
+      <workItem from="1567110873667" duration="23128000" />
+      <workItem from="1567503522797" duration="384000" />
+      <workItem from="1567531418625" duration="5462000" />
+      <workItem from="1567615576238" duration="8433000" />
+      <workItem from="1568300407491" duration="849000" />
+      <workItem from="1568652346853" duration="1519000" />
+      <workItem from="1568655271325" duration="2587000" />
+      <workItem from="1568724909036" duration="5000" />
+    </task>
+    <task id="LOCAL-00001" summary="Image profile &amp; processing">
+      <created>1562168786286</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1562168786286</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Make thumbnail in the custom executable - (temp)">
+      <created>1567450677330</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1567450677330</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="43254000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <layout>
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2739872" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" order="8" />
+      <window_info active="true" anchor="bottom" id="Version Control" order="9" visible="true" weight="0.32936078" />
+      <window_info anchor="bottom" id="Terminal" order="10" weight="0.32936078" />
+      <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Database" order="3" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="RECENTLY_FILTERED_USER_GROUPS">
+                <collection />
+              </option>
+              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+                <collection />
+              </option>
+              <option name="COLUMN_ORDER">
+                <list>
+                  <option value="0" />
+                  <option value="1" />
+                  <option value="2" />
+                  <option value="3" />
+                </list>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list />
+          </value>
+        </entry>
+        <entry key="User">
+          <value>
+            <list />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Image profile &amp; processing" />
+    <MESSAGE value="Make thumbnail in the custom executable - (temp)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Make thumbnail in the custom executable - (temp)" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://D:/Qlik/Load_scripts/ginsights/scripts/billing/billing-facts.qvs">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="19" column="16" selection-start-line="19" selection-start-column="16" selection-end-line="19" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/aws/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="24" column="57" selection-start-line="24" selection-start-column="57" selection-end-line="24" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Makefile">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="31" selection-start-line="3" selection-start-column="31" selection-end-line="3" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cli.cc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15810">
+          <caret line="930" column="39" selection-start-line="930" selection-start-column="39" selection-end-line="930" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/aws/Dockerfile">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="612">
+          <caret line="36" column="22" selection-start-line="36" selection-start-column="22" selection-end-line="36" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Dockerfile">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="680">
+          <caret line="40" column="26" selection-start-line="40" selection-start-column="26" selection-end-line="40" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docker-compose.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="6" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/aws/cli.cc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="152">
+          <caret line="910" column="86" selection-start-line="910" selection-start-column="86" selection-end-line="910" selection-end-column="86" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
